@@ -1,0 +1,159 @@
+
+@{
+    ViewBag.Title = "Ajax";
+    ViewBag.SubTitle = "DataTables";
+}
+
+
+  <!-- Datatables css -->
+<link href="~/plugins/datatables/responsive.bootstrap5.min.css" rel="stylesheet" type="text/css">
+<link href="~/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
+
+
+<div class="container-fluid">
+
+    @await Html.PartialAsync("~/Views/Shared/Partials/_PageTitle.cshtml")
+
+
+    <div class="row">
+        <button type="button" class="btn btn-sm btn-primary deleteList" id="sweetalert-params">Click me</button>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header justify-content-between">
+                    <h4 class="card-title"> USER-ROSTER MANAGEMENT </h4>
+                </div>
+
+                <div class="card-body">
+                    <table id="datatables-ajax" class="table table-striped dt-responsive align-middle mb-0">
+                        <thead class="thead-sm text-uppercase fs-xxs">
+                            <tr>
+                                <th style="text-align: center;">NAME</th>
+                                <th style="text-align: center;">Type</th>
+                                <th style="text-align: center;">Description</th>
+                                <th style="text-align: center;">Action</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Datatables js -->
+<script src="~/plugins/datatables/dataTables.min.js"></script>
+<script src="~/plugins/datatables/dataTables.bootstrap5.min.js"></script>
+<script src="~/plugins/datatables/dataTables.responsive.min.js"></script>
+<script src="~/plugins/datatables/responsive.bootstrap5.min.js"></script>
+
+<script src="~/plugins/sweetalert2/sweetalert2.min.js"></script>
+
+
+<!-- Page js -->
+<script>
+    $(document).ready(function(){
+
+        const defaultButtonClasses = {
+            confirmButton: 'btn btn-primary mt-2',
+            cancelButton: 'btn btn-danger mt-2',
+        };
+
+
+
+        const tableElement = document.getElementById('datatables-ajax')
+        if (tableElement) {
+            new DataTable(tableElement, {
+                ajax: 'http://localhost:9089/system/webdev/Main/API/getUsersSources',
+                processing: true,
+                success: function(data) {
+                    console.log("Data received:", data);
+                },
+                columns: [
+                    {data: 'Name'},
+                    {data: 'Type'},
+                    {data: 'Description'},
+                    {
+                        data: 'Action',
+                        render: (data, type, row) => {
+                            return `<div class="row">
+                                        <div class="col col-lg-6 dropdown">
+                                            <button style="width: 100%" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                MORE
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a data-id="ManageUsers${data}" name=${data} class="dropdown-item ManageUsers" href="#">MANAGE USERS</a>
+                                                <a data-id="Delete${data}" name=${data} class="dropdown-item deleteList" href="#">DELETE</a>
+                                            </div>
+                                        </div> 
+                                        <div class="col col-lg-6">
+                                            <a href="#" class="btn btn-light btn-icon btn-sm rounded-circle"><i class="ti ti-edit fs-lg"></i></a>
+                                        </div>
+                                    </div>`;
+
+                        }
+                    }
+                ],
+                language: {
+                    paginate: {
+                        first: '<i class="ti ti-chevrons-left"></i>',
+                        previous: '<i class="ti ti-chevron-left"></i>',
+                        next: '<i class="ti ti-chevron-right"></i>',
+                        last: '<i class="ti ti-chevrons-right"></i>'
+                    },
+                    lengthMenu: '_MENU_ Companies per page',
+                    info: 'Showing <span class="fw-semibold">_START_</span> to <span class="fw-semibold">_END_</span> of <span class="fw-semibold">_TOTAL_</span> Name'
+                }
+            });
+        }
+
+        $('#datatables-ajax tbody').on('click', '.deleteList', function(){
+            Swal.fire({
+                title: "Delete File?",
+                html: "User List in <b style='font-size: 20px'>"+ $(this).attr('name') +"</b> <i> Will be delted and cannot be undone!</i>",
+                text: "",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Delete",
+                cancelButtonText: "Cancel",
+                showCloseButton: true,
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: defaultButtonClasses.confirmButton + " me-2",
+                    cancelButton: defaultButtonClasses.cancelButton
+                }
+            }).then(result => {
+                if (result.isConfirmed) {
+                    showAlert({
+                        title: "Deleted!",
+                        text: "The file has been deleted.",
+                        icon: "success"
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    showAlert({
+                        title: "Action Cancelled",
+                        text: "Your file is safe.",
+                        icon: "error"
+                    });
+                }
+            });
+        });
+    
+        $('#datatables-ajax tbody').on('click', '.ManageUsers', function () {
+            const id = $(this).attr('name');
+           
+            event.preventDefault();
+            clearInterval();        
+            $("[id='page']").load("@Url.Action("UsersList", "UsersIgnition")", {dataSource: id});
+        });
+    });
+</script>
+
+
+
+   

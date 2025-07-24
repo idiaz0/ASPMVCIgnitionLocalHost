@@ -1,0 +1,244 @@
+
+@{
+    ViewBag.Title = "TreeView";
+    ViewBag.SubTitle = "Miscellaneous";
+}
+
+<style>
+   .contenedor {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      margin: auto;
+      aspect-ratio: 16 / 9; /* mantiene proporción al escalar */
+      /*background-color: rgb(42, 114, 138);*/
+      overflow: hidden;
+      
+    }
+
+    .div-base {
+      width: 100%;
+      height: 100%;
+      
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+      
+    }
+
+    .div-encimaHEV1 {
+      position: absolute;
+      top: 43%;
+      left: 23%;
+      width: 20%;
+      height: 56%;
+      padding: 1rem;
+      margin: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      text-align: center;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      animation: fadeInOut 1s infinite alternate;
+    }
+
+    .div-encimaHEV2{
+      position: absolute;
+      top: 1%;
+      left: 41%;
+      width: 36%;
+      height: 25%;
+      padding: 1rem;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      text-align: center;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      /*animation: fadeInOut 1s infinite alternate;*/
+    }
+
+     .div-encimaHEV3{
+      position: absolute;
+      top: 57%;
+      left: 62%;
+      width: 36%;
+      height: 25%;
+      padding: 1rem;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      text-align: center;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      /*animation: warning 1s infinite alternate;*/
+    }
+
+    @@media (max-width: 600px) {
+      .div-encima {
+        font-size: 1rem;
+        padding: 0.8rem;
+        top: 5%;
+        left: 5%;
+        width: 90%;
+      }
+    }
+
+    @@keyframes fadeInOut {
+        0% {
+            background-color: rgba(4, 255, 0, 0.109);
+        }
+        100% {
+            background-color: rgba(0, 255, 42, 0.369);
+        }
+    }
+
+    @@keyframes warning {
+        0% {
+            background-color: rgba(255, 0, 0, 0.109);
+        }
+        100% {
+            background-color: rgba(255, 0, 0, 0.369);
+        }
+    }
+    
+
+</style>
+
+
+<div class="container-fluid">
+
+    @await Html.PartialAsync("~/Views/Shared/Partials/_PageTitle.cshtml")
+
+
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Ajax Data</h4>
+                </div>
+
+                <div class="card-body">
+                    <div id="jstree"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-10">
+            <div class="row text-center mb-3"><i id="route"></i></div>
+            <div class="row text-center mb-3">
+                <div class="col">
+                    <div class="bg-light bg-opacity-50 p-2">
+                        <h5 class="m-0"><span class="text-muted">Route: </span><span id="route" data-target="40"></span></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center mb-3 contenedor">
+                <div class="div-base"><img class="img-fluid img-thumbnail " style="width: 100%; height:  100%" src="~/images/plant/Layout.png" alt=""></div>
+                <div id="HEV1" class="div-encimaHEV1"></div>
+                <div id="HEV2" class="div-encimaHEV2"></div>
+                <div id="HEV3" class="div-encimaHEV3"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="~/plugins/jstree/jstree.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+
+        $("[id='HEV1']").load("@Url.Action("Assets","Dashboards")", {Line: 'HEV1', Asset: 'BA2MD000123', DownTime: 0, className: 'row'});
+        $("[id='HEV2']").load("@Url.Action("Assets","Dashboards")", {Line: 'HEV2', Asset: 'BA2MD000345', DownTime: 0, className: 'col col-lg-4'});
+        $("[id='HEV3']").load("@Url.Action("Assets","Dashboards")", {Line: 'HEV3', Asset: 'BA2MD000867', DownTime: 0, className: 'col col-lg-4'});
+
+        $.getJSON("http://localhost:9089/system/webdev/Main/API/getMenu", function(data){
+            dataMenu = []
+            dataMenu.push(data.jsonMenu);
+            //console.log(dataMenu[0]);
+
+            const dataset = dataMenu[0];
+
+            const tree = {};
+
+            dataset.forEach(path => {
+                const parts = path.replace("[MQTT Engine]", "").split('/').filter(Boolean);
+                let current = tree;
+                parts.forEach(part => {
+                    current[part] = current[part] || {};
+                    current = current[part];
+                });
+            });
+
+            function convertToJsTreeFormat(obj, parentId = "") {
+            const result = [];
+            for (const key in obj) {
+                const nodeId = parentId ? parentId + '/' + key : key;
+                const children = convertToJsTreeFormat(obj[key], nodeId);
+                result.push({
+                    id: nodeId,
+                    text: key,
+                    children: children
+                });
+            }
+            return result;
+            }
+
+            const jsTreeData = convertToJsTreeFormat(tree);
+
+
+
+            $('#jstree').jstree({ 
+                "plugins" : ["dnd", "state", "types"],
+                'core' : {
+                            'check_callback': true,
+                            'themes': {'responsive': false},
+                            'data' : jsTreeData
+                        } 
+            });
+
+            $('#jstree').on('changed.jstree', function (e, data) {
+                if (data.selected.length > 0) {
+                    var selectedNodeText = data.instance.get_node(data.selected[0]).text;
+                    //console.log('Selected node text:', selectedNodeText);
+                    // You can also get other properties of the node, like its ID:
+                     var selectedNodeId = data.selected[0];
+                    //console.log('Selected node ID:', selectedNodeId);
+                    $("[id='route']").text(selectedNodeId);
+                }
+            });
+
+
+        });
+
+        setInterval(function(){
+            $.getJSON("http://localhost:9089/system/webdev/Main/API/Operation/getLine?Line=plant/line1", function(data){
+                //console.log(data.dataJSON);
+                arrClass = ['row', 'col col-lg-4', 'col col-lg-4' ]
+                for (var i = 1; i <= 3; i++) {
+                    if (data.dataJSON['Status'] == 'True'){
+                        console.log(data.dataJSON['Status']);
+                        $("[id='HEV"+ i +"']").css('animation', 'fadeInOut 1s infinite alternate');
+                    }else{
+                        $("[id='HEV"+ i +"']").css('animation', 'warning 1s infinite alternate');
+                    }
+                    
+                    
+                    $("[id='HEV"+ i +"']").load("@Url.Action("Assets","Dashboards")", { Line: 'HEV'+ i +'', 
+                                                                                        DownTime: data.dataJSON['Downtime'], 
+                                                                                        PartsProduced: data.dataJSON['PartsProduced'], 
+                                                                                        Scrap: data.dataJSON['Scrap'],
+                                                                                        Status: data.dataJSON['Status'], 
+                                                                                        MTTR: data.dataJSON['MTTR'],
+                                                                                        OA: data.dataJSON['OA'],
+                                                                                        className: arrClass[i-1] });
+                }
+            });           
+            
+        }, 1000)
+
+        
+    });
+</script>
