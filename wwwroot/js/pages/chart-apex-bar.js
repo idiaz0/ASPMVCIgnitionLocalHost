@@ -194,6 +194,7 @@ new CustomApexChart({
             title: {
                 text: undefined
             },
+            reversed: true,
 
         },
         colors: [ins('primary'), ins('secondary'), ins('info'), ins('danger'), ins('purple')],
@@ -229,6 +230,90 @@ new CustomApexChart({
     })
 })
 
+new CustomApexChart({
+    selector: '#stacked-bar2',
+    options: () => ({
+        chart: {
+            height: 350,
+            type: 'bar',
+            stacked: true,
+            toolbar: {
+                show: false
+            }
+        },
+        plotOptions: {
+            bar: {
+                horizontal: true,
+            },
+
+        },
+        stroke: {
+            show: false
+        },
+        series: [{
+            name: 'Marine Sprite',
+            data: [44, 55, 41, 37, 22, 43, 21]
+        }, {
+            name: 'Striking Calf',
+            data: [53, 32, 33, 52, 13, 43, 32]
+        }, {
+            name: 'Tank Picture',
+            data: [12, 17, 11, 9, 15, 11, 20]
+        }, {
+            name: 'Bucket Slope',
+            data: [9, 7, 5, 8, 6, 9, 4]
+        }, {
+            name: 'Reborn Kid',
+            data: [25, 12, 19, 32, 25, 24, 10]
+        }],
+        xaxis: {
+            categories: [2019, 2020, 2021, 2022, 2023, 2024, 2025],
+            labels: {
+                formatter: function (val) {
+                    return val + "K"
+                }
+            },
+            axisBorder: {
+                show: false,
+            }
+        },
+        yaxis: {
+            show: false,
+            reversed: false,
+
+        },
+        colors: [ins('primary'), ins('secondary'), ins('info'), ins('danger'), ins('purple')],
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return val + "K"
+                }
+            }
+        },
+        fill: {
+            opacity: 1
+        },
+        states: {
+            hover: {
+                filter: 'none'
+            }
+        },
+        legend: {
+            position: 'top',
+            horizontalAlign: 'center',
+            offsetY: -7
+        },
+        grid: {
+            borderColor: [ins('border-color')],
+            padding: {
+                top: -30,   // You can use negative or positive values here
+                right: 0,
+                bottom: -15,
+                left: 0
+            }
+        }
+    })
+})
 
 //
 // 100% STACKED BAR CHART
@@ -265,11 +350,16 @@ new CustomApexChart({
             data: [12, 17, 11, 9, 15, 11, 20]
         }, {
             name: 'Bucket Slope',
-            data: [9, 7, 5, 8, 6, 9, 4]
+            data: [9, 7, 5, 8, 6, 9, 4] 
         }, {
             name: 'Reborn Kid',
             data: [25, 12, 19, 32, 25, 24, 10]
         }],
+        yaxis: {
+            labels: {
+                align: 'right'
+            }
+        },
         xaxis: {
             categories: [2019, 2020, 2021, 2022, 2023, 2024, 2025],
             axisBorder: {

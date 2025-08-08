@@ -846,7 +846,7 @@ class Plugins {
             const type = item.getAttribute("data-provider");
             const attrs = item.attributes;
             const dateConfig = { disableMobile: true, defaultDate: new Date() };
-
+            
             if (type === "flatpickr") {
                 if (attrs["data-date-format"])
                     dateConfig.dateFormat = attrs["data-date-format"].value;

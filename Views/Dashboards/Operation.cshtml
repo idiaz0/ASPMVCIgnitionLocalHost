@@ -40,7 +40,6 @@
       font-size: 1.2rem;
       border-radius: 8px;
       overflow: hidden;
-      animation: fadeInOut 1s infinite alternate;
     }
 
     .div-encimaHEV2{
@@ -56,7 +55,6 @@
       font-size: 1.2rem;
       border-radius: 8px;
       overflow: hidden;
-      /*animation: fadeInOut 1s infinite alternate;*/
     }
 
      .div-encimaHEV3{
@@ -73,6 +71,21 @@
       border-radius: 8px;
       overflow: hidden;
       /*animation: warning 1s infinite alternate;*/
+    }
+
+    .div-encimaHEV4{
+      position: absolute;
+      top: 45%;
+      left: 44%;
+      width: 16.5%;
+      height: 54%;
+      padding: 1rem;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      text-align: center;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      overflow: hidden;
     }
 
     @@media (max-width: 600px) {
@@ -125,20 +138,92 @@
             </div>
         </div>
         <div class="col-lg-10">
-            <div class="row text-center mb-3"><i id="route"></i></div>
-            <div class="row text-center mb-3">
-                <div class="col">
-                    <div class="bg-light bg-opacity-50 p-2">
-                        <h5 class="m-0"><span class="text-muted">Route: </span><span id="route" data-target="40"></span></h5>
+            <div class="row">
+                <div class="col-xl-3">
+                    <div class="mb-3">
+                        <label class="form-label">START DATE</label>
+                        <input id="dateRange" type="text" data-provider="flatpickr" data-date-format="m/d/Y" data-range-date="true" placeholder="Select range date" class="form-control" data-enable-time>
                     </div>
                 </div>
+                <!--<div class="col-xl-3">
+                    <div class="mb-3">
+                        <label class="form-label">END DATE</label>
+                        <input type="text" data-provider="flatpickr" data-date-format="d/m/y" placeholder="Select end date" class="form-control" data-enable-time>
+                    </div>
+                </div>-->
+                <div class="col-lg-1">
+                    <button id="btnSearch" class="btn btn-primary">SEARCH</button>
+                </div>
             </div>
-            <div class="row text-center mb-3 contenedor">
-                <div class="div-base"><img class="img-fluid img-thumbnail " style="width: 100%; height:  100%" src="~/images/plant/Layout.png" alt=""></div>
-                <div id="HEV1" class="div-encimaHEV1"></div>
-                <div id="HEV2" class="div-encimaHEV2"></div>
-                <div id="HEV3" class="div-encimaHEV3"></div>
-            </div>
+            <div class="card">
+                <div class="card-header justify-content-between align-items-center">
+                    <h5 class="card-title">PLANT LAYOUT <span class="badge text-bg-primary">IN+</span></h5>
+                    <div class="card-action">
+                        <a href="#!" class="card-action-item" data-action="card-toggle"><i class="ti ti-chevron-up"></i></a>
+                        <a href="#!" class="card-action-item" data-action="card-refresh"><i class="ti ti-refresh"></i></a>
+                        <a href="#!" class="card-action-item" data-action="card-close"><i class="ti ti-x"></i></a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+
+                    
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">100% Stacked Bar Chart</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div dir="ltr">
+                                        <div id="full-stacked-bar" class="apex-charts"></div>
+                                    </div>
+                                </div>
+                                <!-- end card body-->
+                            </div>
+                            <!-- end card -->
+                        </div>  
+
+                        <div class="col-xl-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Bar with Negative Values</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div dir="ltr">
+                                        <div id="chart-basic-bar" style="height:390px"></div>
+                                    </div>
+                                </div>
+                                <!-- end card body-->
+                            </div>
+                            <!-- end card -->
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="row text-center mb-3">
+                        <div class="col">
+                            <div class="bg-light bg-opacity-50 p-2">
+                                <h5 class="m-0"><span class="text-muted">Route: </span><span id="route" data-target="40"></span></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row text-center mb-3 contenedor">
+                        <div class="div-base"><img class="img-fluid img-thumbnail " style="width: 100%; height: 100%" src="~/images/plant/Layout.png" alt=""></div>
+                        <div id="HEV1" class="div-encimaHEV1"></div>
+                        <div id="HEV2" class="div-encimaHEV2"></div>
+                        <div id="HEV3" class="div-encimaHEV3"></div>
+                        <div id="HEV4" class="div-encimaHEV4"></div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y">
+                        </div></div>
+                    
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
         </div>
     </div>
 
@@ -146,13 +231,100 @@
 
 
 <script src="~/plugins/jstree/jstree.min.js"></script>
+<script src="~/plugins/apexcharts/apexcharts.min.js"></script>
+<script src="~/plugins/echarts/echarts.min.js"></script>
+<script src="~/js/test.js"></script>
 
 <script>
     $(document).ready(function(){
+        
+        $("[id='btnSearch']").click(function(){
+            
+            const [start, end] = $("[id='dateRange']").val().split(" to ");
+            function formatear(fechaHora) {
+                const [fecha, hora] = fechaHora.split(" ");
+                return `${fecha}%20${hora}:00`;
+            }
+            
+            const startTime = formatear(start);
+            const endTime = formatear(end);
+            //alert(`endTime=${endTime}&startTime=${startTime}`);
+            let series1 = []
+            let dates1 = []    
+            $.getJSON("http://localhost:9089/system/webdev/Main/API/Operation/getBSCOperation?"+ `endTime=${endTime}&startTime=${startTime}` +"&line=line1", function(data){  
+                series1.push(data.jsonData);
+                dates1.push(data.dates); 
+            }).done(function(data) {
+                $("[id='full-stacked-bar']").empty();
+                new CustomApexChart({
+                    selector: '#full-stacked-bar',
+                    options: () => ({
+                        chart: {
+                            height: 350,
+                            type: 'bar',
+                            stacked: true,
+                            
+                            toolbar: {
+                                show: false
+                            }
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: false,
+                            },
+                        },
+                        stroke: {
+                            width: 1,
+                            colors: ['transparent']
+                        },
+                        series: series1[0],
+                        xaxis: {
+                            categories: dates1[0],
+                            axisBorder: {
+                                show: false,
+                            }
+                        },
+                        colors: [ins('info'), ins('warning'), ins('primary'), ins('pink'), ins('purple')],
+                        tooltip: {
+                            y: {
+                                formatter: function (val) {
+                                    return val + "K"
+                                }
+                            }
+                        },
+                        fill: {
+                            opacity: 1
+
+                        },
+                        states: {
+                            hover: {
+                                filter: 'none'
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                            horizontalAlign: 'center',
+                            offsetY: -7
+                        },
+                        grid: {
+                            borderColor: [ins('border-color')],
+                            padding: {
+                                top: -30,   // You can use negative or positive values here
+                                right: 0,
+                                bottom: -15,
+                                left: 0
+                            }
+                        }
+                    })
+                })
+            });
+             
+        });
 
         $("[id='HEV1']").load("@Url.Action("Assets","Dashboards")", {Line: 'HEV1', Asset: 'BA2MD000123', DownTime: 0, className: 'row'});
         $("[id='HEV2']").load("@Url.Action("Assets","Dashboards")", {Line: 'HEV2', Asset: 'BA2MD000345', DownTime: 0, className: 'col col-lg-4'});
         $("[id='HEV3']").load("@Url.Action("Assets","Dashboards")", {Line: 'HEV3', Asset: 'BA2MD000867', DownTime: 0, className: 'col col-lg-4'});
+        $("[id='HEV4']").load("@Url.Action("Assets","Dashboards")", {Line: 'HEV4', Asset: 'BA2MD000867', DownTime: 0, className: 'row'});
 
         $.getJSON("http://localhost:9089/system/webdev/Main/API/getMenu", function(data){
             dataMenu = []
@@ -213,20 +385,19 @@
 
         });
 
+        /*$.getJSON("http://localhost:9089/system/webdev/Main/API/Operation/getLine?Line=plant/line1", function(data){  
+            console.log(data.dataJSON);
+        });
+
         setInterval(function(){
-            $.getJSON("http://localhost:9089/system/webdev/Main/API/Operation/getLine?Line=plant/line1", function(data){
-                //console.log(data.dataJSON);
-                arrClass = ['row', 'col col-lg-4', 'col col-lg-4' ]
-                for (var i = 1; i <= 3; i++) {
-                    if (data.dataJSON['Status'] == 'True'){
-                        console.log(data.dataJSON['Status']);
-                        $("[id='HEV"+ i +"']").css('animation', 'fadeInOut 1s infinite alternate');
-                    }else{
-                        $("[id='HEV"+ i +"']").css('animation', 'warning 1s infinite alternate');
-                    }
-                    
-                    
-                    $("[id='HEV"+ i +"']").load("@Url.Action("Assets","Dashboards")", { Line: 'HEV'+ i +'', 
+            console.log($('[class*="div-encima"]').length);
+            for (let i=1; i <= $("[class*='div-encima']").length; i++){
+                let arrClass = ['row', 'col col-lg-4', 'col col-lg-4', 'row' ]
+                $.getJSON("http://localhost:9089/system/webdev/Main/API/Operation/getLine?Line=plant/line"+ i +"", function(data){  
+                    console.log(data.dataJSON['Status']); 
+                    data.dataJSON['Status'] == 'Run' ? $("[id='HEV"+i+"']").css('animation', 'fadeInOut 1s infinite alternate'): 
+                                                       $("[id='HEV"+i+"']").css('animation', 'warning 1s infinite alternate')
+                    $("[id='HEV"+i+"']").load("@Url.Action("Assets","Dashboards")", { Line: 'HEV'+ i +'', 
                                                                                         DownTime: data.dataJSON['Downtime'], 
                                                                                         PartsProduced: data.dataJSON['PartsProduced'], 
                                                                                         Scrap: data.dataJSON['Scrap'],
@@ -234,11 +405,206 @@
                                                                                         MTTR: data.dataJSON['MTTR'],
                                                                                         OA: data.dataJSON['OA'],
                                                                                         className: arrClass[i-1] });
-                }
-            });           
+                
+                });  
+            }         
             
-        }, 1000)
+        }, 5000)*/
+
+        let series = []
+        let dates = []
+        $.getJSON("http://localhost:9089/system/webdev/Main/API/Operation/getBSCOperation?endTime=08/06/2025%2019:00:00&startTime=08/01/2025%2006:00:00&line=line1", function(data){  
+            series.push(data.jsonData);
+            dates.push(data.dates);
+
+            new CustomEChart({
+                selector: '#chart-basic-bar',
+                options: () => ({
+          
+                    title: { show: false },
+                    legend: {
+                        top: 'top',
+                        orient: 'horizontal',
+                        textStyle: {
+                            color: ins("body-color"),
+                            fontSize: 14,
+                            
+                            fontFamily: 'Arial'
+                        },
+                        
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: { type: 'shadow' },
+                        formatter: function (params) {
+                        let result = params.map(p => {
+                            return `${p.seriesName}: ${Math.abs(p.value)}`;
+                        }).join('<br/>');
+                        return `${params[0].name}<br/>${result}`;
+                        }
+                    },
+                    grid: [
+                        { left: '0%', right: '45%', containLabel: true },  // Lado izquierdo
+                        { left: '55%', right: '5%', containLabel: true },   // Lado derecho
+                        {
+                            top: '80', // ajusta la distancia desde la parte superior del canvas
+                            left: '40',
+                            right: '20',
+                            bottom: '50'
+                        }
+                    ],
+                    xAxis: [
+                        {
+                        type: 'value',
+                        inverse: false,
+                        gridIndex: 0,
+                        axisLabel: {
+                            formatter: value => Math.abs(value)
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                            type: 'dashed',
+                            color: "rgba(133, 141, 152, 0.1)"
+                            }
+                        }
+                        },
+                        {
+                        type: 'value',
+                        gridIndex: 1,
+                        axisLabel: {
+                            formatter: value => Math.abs(value)
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                            type: 'dashed',
+                            color: "rgba(133, 141, 152, 0.1)"
+                            }
+                        }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'category',
+                            inverse: true,
+                            data: ['PARTS PRODUCED', 'SCRAP', 'PROGRAMED', 'DOWNTIME'],
+                            gridIndex: 0,
+                            axisTick: { show: false },
+                            axisLine: { show: false },
+                            splitLine: {
+                                show: true,
+                                lineStyle: {
+                                type: 'dashed',
+                                color: "rgba(133, 141, 152, 0.1)"
+                                }
+                            }
+                        },
+                        {
+                            type: 'category',
+                            inverse: true,
+                            data: ['PARTS PRODUCED', 'SCRAP', 'PROGRAMED', 'DOWNTIME'],
+                            gridIndex: 1,
+                            axisTick: { show: false },
+                            axisLine: { show: false },
+                            axisLabel: { show: false }, // Oculta etiquetas duplicadas
+                            splitLine: { show: false }
+                        }
+                    ],
+                    series: [
+                        // Lado izquierdo (stack: LEFT)
+                        {
+                            name: 'Male A',
+                            type: 'bar',
+                            stack: 'LEFT',
+                            xAxisIndex: 0,
+                            yAxisIndex: 0,
+                            label: {
+                                show: true,
+                               
+                                formatter: p => Math.abs(p.value),
+                                color: '#fff',
+                                fontSize: 12,
+                                fontWeight: 'bold',
+                                fontFamily: 'Arial'
+                            },
+                            itemStyle: { color: '#6A54B3' },
+                            data: [-5.0, -1.8, -1.6, -1.2]
+                        },
+                        {
+                            name: 'Male B',
+                            type: 'bar',
+                            stack: 'LEFT',
+                            xAxisIndex: 0,
+                            yAxisIndex: 0,
+                            label: {
+                                show: true,
+                                
+                                formatter: p => Math.abs(p.value),
+                                color: '#fff',
+                                fontSize: 12,
+                                fontWeight: 'bold',
+                                fontFamily: 'Arial'
+                            },
+                            itemStyle: { color: '#8B78C6' },
+                            data: [-1.5, -1.2, -1.2, -1.3]
+                        },
+
+                        // Lado derecho (stack: RIGHT)
+                        {
+                            name: 'Female A',
+                            type: 'bar',
+                            stack: 'RIGHT',
+                            xAxisIndex: 1,
+                            yAxisIndex: 1,
+                            label: {
+                                show: true,
+                                
+                                formatter: p => p.value,
+                                color: '#fff',
+                                fontSize: 12,
+                                fontWeight: 'bold',
+                                fontFamily: 'Arial'
+                            },
+                            itemStyle: { color: '#EE6666' },
+                            data: [1.8, 1.6, 1.5, 1.1]
+                        },
+                        {
+                            name: 'Female B',
+                            type: 'bar',
+                            stack: 'RIGHT',
+                            xAxisIndex: 1,
+                            yAxisIndex: 1,
+                            label: {
+                                show: true,
+                                
+                                formatter: p => p.value,
+                                color: '#fff',
+                                fontSize: 12,
+                                fontWeight: 'bold',
+                                fontFamily: 'Arial'
+                            },
+                            itemStyle: { color: '#F59E94' },
+                            data: [1.4, 1.3, 1.2, 1.3]
+                        }
+                    ]
+
+
+
+                    
+                })
+            })
+
+
+        });
+
 
         
+
+
+
+
+
+
     });
 </script>

@@ -5,10 +5,12 @@
  * Version: 4.2.0
  */
 
+  
+
 if (jQuery().daterangepicker) {
     const start = moment().subtract(29, 'days');
     const end = moment();
-
+   
     // Default config for range pickers
     const defaultRangeOptions = {
         startDate: start,

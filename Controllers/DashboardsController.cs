@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inspinia.Controllers
@@ -21,18 +20,9 @@ namespace Inspinia.Controllers
             return PartialView("Operation");
         }
 
-        public ActionResult Assets(string Line, String Asset, int DownTime, int PartsProduced, int Scrap, int OA, int MTTR, String className, String Status)
+        public ActionResult Assets(string dataJSON )
         {
-            ViewBag.Line = Line;
-            ViewBag.Asset = Asset;
-            ViewBag.OA = OA;
-            ViewBag.DownTime = DownTime;
-            ViewBag.PartsProduced = PartsProduced;
-            ViewBag.Scrap = Scrap;
-            ViewBag.MTTR = MTTR;
-            ViewBag.ClassName = className;
-            ViewBag.Status = Status;
-            return PartialView("Assets");
+            return PartialView("Assets", dataJSON);
         }
 
 

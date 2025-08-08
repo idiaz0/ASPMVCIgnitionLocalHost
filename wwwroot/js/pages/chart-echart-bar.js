@@ -657,7 +657,8 @@ new CustomEChart({
             fontFamily: getComputedStyle(document.body).fontFamily
         }, grid: {
             left: '10px', top: '10%', right: '4%', bottom: '0', containLabel: true
-        }, color: [ins("primary"), ins("secondary"), ins("warning"), ins("info"), ins("purple")], tooltip: {
+        }, color: [ins("primary"), ins("secondary"), ins("warning"), ins("info"), ins("purple")], 
+        tooltip: {
             trigger: "axis",
             padding: [5, 0],
             backgroundColor: ins("secondary-bg"),
@@ -684,7 +685,8 @@ new CustomEChart({
         }, legend: {
             textStyle: {color: ins("body-color")}
         }, series: [{
-            name: 'Direct', type: 'bar', stack: 'total', label: {
+            name: 'Direct', type: 'bar', stack: 'total', 
+            label: {
                 show: true, color: 'white'
             }, emphasis: {
                 focus: 'series'
